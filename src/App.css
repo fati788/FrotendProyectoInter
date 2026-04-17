@@ -1,0 +1,520 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── Reset ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── Dark Theme ─────────────────────────────────────────────────────────────── */
+.theme-dark {
+  --bg-base:        #0a0d12;
+  --bg-surface:     #111620;
+  --bg-card:        #161c28;
+  --bg-card-hover:  #1c2436;
+  --bg-elevated:    #1e2738;
+  --border:         #252f42;
+  --border-light:   #2a3650;
+
+  --txt-primary:    #e8edf5;
+  --txt-secondary:  #8fa0bc;
+  --txt-muted:      #4d5f7a;
+
+  --accent:         #3d8ef0;
+  --accent-glow:    rgba(61,142,240,0.18);
+  --accent-dim:     #1a4a8a;
+
+  --green:          #22c55e;
+  --green-bg:       rgba(34,197,94,0.12);
+  --green-border:   rgba(34,197,94,0.3);
+
+  --amber:          #f59e0b;
+  --amber-bg:       rgba(245,158,11,0.12);
+  --amber-border:   rgba(245,158,11,0.3);
+
+  --red:            #ef4444;
+  --red-bg:         rgba(239,68,68,0.12);
+  --red-border:     rgba(239,68,68,0.3);
+
+  --pipe-color:     #3d8ef0;
+  --water-color:    rgba(61,142,240,0.45);
+  --tank-bg:        #1a2236;
+  --tank-border:    #2a3a58;
+  --sensor-cone-bg: #0d2040;
+  --scada-lbl:      #8fa0bc;
+  --scada-lbl-bold: #c8d5e8;
+  --scada-lbl-sm:   #5a6f8a;
+
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:      0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg:      0 8px 32px rgba(0,0,0,0.6);
+  --shadow-accent:  0 0 20px rgba(61,142,240,0.15);
+}
+
+/* ─── Light Theme ────────────────────────────────────────────────────────────── */
+.theme-light {
+  --bg-base:        #f0f4f9;
+  --bg-surface:     #e8edf5;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #f8fafc;
+  --bg-elevated:    #ffffff;
+  --border:         #d1dae8;
+  --border-light:   #e2eaf4;
+
+  --txt-primary:    #0f1623;
+  --txt-secondary:  #4a5f7a;
+  --txt-muted:      #8a9ab5;
+
+  --accent:         #2563eb;
+  --accent-glow:    rgba(37,99,235,0.1);
+  --accent-dim:     #dbeafe;
+
+  --green:          #16a34a;
+  --green-bg:       rgba(22,163,74,0.08);
+  --green-border:   rgba(22,163,74,0.25);
+
+  --amber:          #d97706;
+  --amber-bg:       rgba(217,119,6,0.08);
+  --amber-border:   rgba(217,119,6,0.25);
+
+  --red:            #dc2626;
+  --red-bg:         rgba(220,38,38,0.08);
+  --red-border:     rgba(220,38,38,0.25);
+
+  --pipe-color:     #2563eb;
+  --water-color:    rgba(37,99,235,0.3);
+  --tank-bg:        #e8f0fd;
+  --tank-border:    #93b4f0;
+  --sensor-cone-bg: #dbeafe;
+  --scada-lbl:      #4a5f7a;
+  --scada-lbl-bold: #1e3a5f;
+  --scada-lbl-sm:   #6b7fa0;
+
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:      0 4px 16px rgba(0,0,0,0.1);
+  --shadow-lg:      0 8px 32px rgba(0,0,0,0.12);
+  --shadow-accent:  0 0 20px rgba(37,99,235,0.08);
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+.theme-dark, .theme-light {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-base);
+  color: var(--txt-primary);
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--txt-muted); }
+
+/* ─── Layout ─────────────────────────────────────────────────────────────────── */
+.app-wrapper   { min-height: 100vh; background: var(--bg-base); }
+.app-header    { background: var(--bg-surface); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50; }
+.app-subheader { background: var(--bg-card); border-bottom: 1px solid var(--border); }
+.app-main      { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.875rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ─── Logo / Brand ───────────────────────────────────────────────────────────── */
+.brand { display: flex; align-items: center; gap: 0.75rem; }
+
+.brand-icon {
+  width: 38px; height: 38px;
+  background: var(--accent);
+  border-radius: 10px;
+  display: grid; place-items: center;
+  box-shadow: 0 0 0 4px var(--accent-glow), var(--shadow-accent);
+  flex-shrink: 0;
+}
+.brand-icon svg { width: 20px; height: 20px; color: #fff; }
+
+.brand-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--txt-primary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.brand-sub {
+  font-size: 0.7rem;
+  color: var(--txt-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* ─── Header Right Controls ─────────────────────────────────────────────────── */
+.header-controls { display: flex; align-items: center; gap: 0.75rem; }
+
+.status-pill {
+  display: flex; align-items: center; gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity: 1; box-shadow: 0 0 0 0 var(--green); }
+  50%      { opacity: 0.8; box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+}
+
+.theme-toggle {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--txt-secondary);
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.theme-toggle svg { width: 17px; height: 17px; }
+
+/* ─── Weather Bar ────────────────────────────────────────────────────────────── */
+.weather-bar {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.625rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.weather-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--txt-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.weather-cards { display: flex; gap: 0.5rem; }
+.weather-card {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+.weather-card:hover { border-color: var(--border-light); }
+.weather-day  { font-size: 0.7rem; color: var(--txt-muted); font-weight: 500; }
+.weather-temp { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; color: var(--txt-primary); }
+.weather-cond { font-size: 0.7rem; color: var(--txt-secondary); }
+
+/* ─── Section Header ─────────────────────────────────────────────────────────── */
+.section-header { margin-bottom: 1.25rem; }
+.section-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--txt-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 16px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.section-sub { font-size: 0.78rem; color: var(--txt-muted); margin-top: 0.25rem; }
+
+/* ─── SCADA Container ────────────────────────────────────────────────────────── */
+.scada-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.scada-inner {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ─── SCADA SVG classes (injected via <style> in SVG) ────────────────────────── */
+
+/* ─── Modal ──────────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  animation: fade-in 0.15s ease;
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 1.5rem;
+  min-width: 280px;
+  max-width: 340px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: slide-up 0.2s ease;
+}
+@keyframes slide-up { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--txt-primary);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.modal-close {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--txt-muted);
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+.modal-close:hover { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+
+.modal-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+.modal-row:last-of-type { border-bottom: none; }
+.modal-label { color: var(--txt-muted); font-weight: 500; }
+.modal-value { color: var(--txt-primary); font-weight: 600; }
+.modal-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  background: var(--bg-surface);
+  color: var(--accent);
+  padding: 0.15rem 0.5rem;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+}
+
+/* ─── Modal Sensor Detail ────────────────────────────────────────────────────── */
+.sensor-value-big {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.sensor-value-unit { font-size: 1rem; font-weight: 400; color: var(--txt-muted); }
+
+.level-bar-track {
+  height: 8px;
+  background: var(--bg-surface);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.75rem 0 0.25rem;
+}
+.level-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.badge-ok     { background: var(--green-bg);  border: 1px solid var(--green-border);  color: var(--green); }
+.badge-warn   { background: var(--amber-bg);  border: 1px solid var(--amber-border);  color: var(--amber); }
+.badge-error  { background: var(--red-bg);    border: 1px solid var(--red-border);    color: var(--red);   }
+
+/* ─── Control Buttons ────────────────────────────────────────────────────────── */
+.ctrl-btn {
+  flex: 1; padding: 0.6rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+.ctrl-btn-on {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+  color: var(--green);
+}
+.ctrl-btn-on:hover, .ctrl-btn-on.active {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(34,197,94,0.3);
+}
+.ctrl-btn-off {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: var(--red);
+}
+.ctrl-btn-off:hover, .ctrl-btn-off.active {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(239,68,68,0.3);
+}
+
+/* ─── Sectors Panel ──────────────────────────────────────────────────────────── */
+.sectors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.sector-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+.sector-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-accent), var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.sector-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--border);
+}
+.sector-card-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--txt-primary);
+  letter-spacing: 0.03em;
+}
+.sector-card-id {
+  font-size: 0.68rem;
+  color: var(--txt-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.1rem 0.45rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.sector-info-row {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  margin-bottom: 0.625rem;
+}
+.sector-info-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+}
+.sector-info-icon svg { width: 14px; height: 14px; }
+
+.sector-info-label { font-size: 0.68rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+.sector-info-value { font-size: 0.82rem; color: var(--txt-primary); font-weight: 500; margin-top: 0.1rem; }
+
+.sector-detail-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.55rem;
+  border-radius: 9px;
+  border: 1px solid var(--accent);
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.sector-detail-btn:hover { background: var(--accent); color: #fff; box-shadow: 0 0 14px var(--accent-glow); }
+
+/* ─── Empty / Error / Loading ────────────────────────────────────────────────── */
+.state-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2.5rem;
+  text-align: center;
+}
+.state-box p { color: var(--txt-secondary); font-size: 0.9rem; }
+.state-error { color: var(--amber) !important; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+
+/* ─── Loading Spinner ────────────────────────────────────────────────────────── */
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Divider Section ────────────────────────────────────────────────────────── */
+.section-divider { margin: 2.5rem 0; border: none; border-top: 1px solid var(--border); }
+
+/* ─── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .app-main { padding: 1rem; }
+  .header-inner { padding: 0.75rem 1rem; }
+  .weather-bar { padding: 0.5rem 1rem; }
+  .weather-cards { flex-wrap: wrap; gap: 0.4rem; }
+  .brand-name { font-size: 1.1rem; }
+  .status-pill { display: none; }
+}
