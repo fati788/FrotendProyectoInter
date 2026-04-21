@@ -518,3 +518,33 @@
   .brand-name { font-size: 1.1rem; }
   .status-pill { display: none; }
 }
+
+/* ── Nav Tabs ─────────────────────────────────────────────── */
+.nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.20);
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.nav-tab {
+    padding: 5px 16px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-tab:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.25);
+    transition: all 0.2s;
+}
+
+.nav-tab--active {
+    background: rgba(255, 255, 255, 0.20);
+    color: #fff;
+}

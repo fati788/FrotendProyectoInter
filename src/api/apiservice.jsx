@@ -78,6 +78,32 @@ export const sensorService = {
             throw error;
         }
     },
+
+    // Obtener TODAS las lecturas de todos los sensores
+    getAllReadings: async () => {
+        try {
+            const response = await api.get('/lecturas');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching readings:', error);
+            throw error;
+        }
+    },
+
+    //Obtener sensores por sector
+    getSensorsBySector: async (sectorId) => {
+        try {
+            const response = await api.get(`/sensors/sector`, {
+                params: {
+                    sector: sectorId
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching sensors for sector ${sectorId}:`, error);
+            throw error;
+        }
+    }
 };
 
 // Servicios para sectores

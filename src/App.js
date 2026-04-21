@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import IoTDashboard from './components/IoTDashboard.jsx'
 import SectorDetailPage from './components/SensorDetailPanel.jsx'
+import SensoresPage from './components/SensoresPage';
+
 // ─── Theme Context ────────────────────────────────────────────────────────────
 export const ThemeContext = createContext({ dark: true, toggle: () => {} })
 export const useTheme = () => useContext(ThemeContext)
@@ -17,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<IoTDashboard />} />
            <Route path="/sector/:sectorId" element={<SectorDetailPage/>} />
+              <Route path="/sensores" element={<SensoresPage />} />
           </Routes>
         </BrowserRouter>
       </div>
