@@ -21,16 +21,10 @@ const normalizeLectures = (lectures) =>
     }));
 
 export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onToggle }) {
-    const [view,      setView]      = useState('chart'); // gráfico por defecto
+    const [view,      setView]      = useState('chart');
     const [chartType, setChartType] = useState('line');
 
-    const [filteredLectures, setFilteredLectures] = useState(null);
-    const [dateFrom,   setDateFrom]   = useState('');
-    const [dateTo,     setDateTo]     = useState('');
-    const [filtering,  setFiltering]  = useState(false);
-    const [filterError,setFilterError]= useState(null);
-
-    const icon        = ICON_BY_TYPE[sensor.type] ?? '◌';
+    const icon        = ICON_BY_TYPE[sensor.tipo?.toUpperCase()] ?? '◌';
     const lastLecture = lectures[lectures.length - 1] ?? null;
     const prevLecture = lectures[lectures.length - 2] ?? null;
     const unit        = lastLecture?.unidad ?? '—';
@@ -40,7 +34,7 @@ export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onTo
         : null;
     const trend = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
 
-    const activeLectures = normalizeLectures(filteredLectures ?? lectures);
+    const activeLectures = normalizeLectures(lectures);
     const max = activeLectures.length ? Math.max(...activeLectures.map(l => l.valor)).toFixed(1) : '—';
     const min = activeLectures.length ? Math.min(...activeLectures.map(l => l.valor)).toFixed(1) : '—';
     const avg = activeLectures.length
