@@ -47,36 +47,6 @@ export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onTo
         ? (activeLectures.reduce((s, l) => s + l.valor, 0) / activeLectures.length).toFixed(1)
         : '—';
 
-    // ── Filtro por fechas (versión hardcodeada: filtra localmente) ──
-    const handleDateFilter = () => {
-        if (!dateFrom || !dateTo) return;
-        setFiltering(true);
-        setFilterError(null);
-        try {
-            const from = new Date(dateFrom);
-            const to   = new Date(dateTo);
-            const filtered = lectures.filter(l => {
-                const d = new Date(l.fecha ?? l.timestamp);
-                return d >= from && d <= to;
-            });
-            if (filtered.length === 0) {
-                setFilterError('Sin lecturas para el rango seleccionado');
-                setFilteredLectures([]);
-            } else {
-                setFilteredLectures(filtered);
-            }
-        } finally {
-            setFiltering(false);
-        }
-    };
-
-
-    const clearFilter = () => {
-        setFilteredLectures(null);
-        setDateFrom('');
-        setDateTo('');
-        setFilterError(null);
-    };
 
     return (
         <motion.div
@@ -105,10 +75,10 @@ export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onTo
                         <span style={{ fontSize: 20, color: '#22c55e', lineHeight: 1 }}>{icon}</span>
                         <div>
                             <div style={{ fontSize: 12, fontWeight: 700, color: '#1e293b', letterSpacing: '-0.02em' }}>
-                                {sensor.nombre}
+                                {sensor.tipo}
                             </div>
                             <div style={{ fontSize: 10, color: '#94a3b8', fontFamily: "'DM Mono', monospace", marginTop: 1 }}>
-                                SECTOR {sensor.sectorId} · ID:{sensor.id}
+                                SECTOR {sensor.sectorId} · TOPIC:{sensor.topicMQTT}
                             </div>
                         </div>
                     </div>
@@ -118,7 +88,7 @@ export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onTo
                         background: '#f5f3ff', padding: '3px 10px', borderRadius: 20,
                         fontFamily: "'DM Mono', monospace",
                     }}>
-            {sensor.tipo}
+            {sensor.nombre}
           </span>
                 </div>
 
@@ -166,46 +136,7 @@ export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onTo
                         style={{ overflow: 'hidden' }}
                         onClick={e => e.stopPropagation()}
                     >
-                        {/* Filtro fechas */}
-                        <div style={{
-                            padding: '12px 18px', background: '#f8fafc',
-                            borderBottom: '1px solid #f1f5f9',
-                            display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center',
-                        }}>
-                            <div style={{ fontSize: 9, color: '#94a3b8', fontFamily: "'DM Mono', monospace", letterSpacing: '0.08em', width: '100%' }}>
-                                FILTRAR POR FECHA
-                            </div>
-                            <input type="datetime-local" value={dateFrom} onChange={e => setDateFrom(e.target.value)} onClick={e => e.stopPropagation()}
-                                   style={{ padding: '5px 8px', borderRadius: 8, border: '1.5px solid #e2e8f0', fontSize: 11, fontFamily: "'DM Mono', monospace", color: '#334155', background: '#fff', outline: 'none' }}
-                            />
-                            <span style={{ fontSize: 11, color: '#cbd5e1', fontFamily: "'DM Mono', monospace" }}>→</span>
-                            <input type="datetime-local" onChange={e => setDateFrom(e.target.value)} onClick={e => e.stopPropagation()}
-                                   style={{ padding: '5px 8px', borderRadius: 8, border: '1.5px solid #e2e8f0', fontSize: 11, fontFamily: "'DM Mono', monospace", color: '#334155', background: '#fff', outline: 'none' }}
-                            />
-                            <button onClick={e => { e.stopPropagation(); handleDateFilter(); }} disabled={!dateFrom || !dateTo || filtering}
-                                    style={{
-                                        padding: '5px 14px', borderRadius: 8, border: 'none',
-                                        background: (!dateFrom || !dateTo || filtering) ? '#e2e8f0' : '#22c55e',
-                                        color: (!dateFrom || !dateTo || filtering) ? '#94a3b8' : '#fff',
-                                        fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 700,
-                                        cursor: (!dateFrom || !dateTo || filtering) ? 'not-allowed' : 'pointer',
-                                    }}>
-                                {filtering ? '…' : '⌕ Filtrar'}
-                            </button>
-                            {filteredLectures !== null && (
-                                <button onClick={e => { e.stopPropagation(); clearFilter(); }} style={{
-                                    padding: '5px 10px', borderRadius: 8, border: '1.5px solid #fecaca',
-                                    background: '#fef2f2', color: '#ef4444', fontSize: 10,
-                                    fontFamily: "'DM Mono', monospace", fontWeight: 600, cursor: 'pointer',
-                                }}>✕ Limpiar</button>
-                            )}
-                            {filterError && <span style={{ fontSize: 10, color: '#ef4444', fontFamily: "'DM Mono', monospace" }}>⚠ {filterError}</span>}
-                            {filteredLectures !== null && !filterError && (
-                                <span style={{ fontSize: 10, color: '#22c55e', fontFamily: "'DM Mono', monospace" }}>
-                  {filteredLectures.length} lectura{filteredLectures.length !== 1 ? 's' : ''} encontrada{filteredLectures.length !== 1 ? 's' : ''}
-                </span>
-                            )}
-                        </div>
+                        
 
                         {/* Tabs tabla/gráfico */}
                         <div style={{

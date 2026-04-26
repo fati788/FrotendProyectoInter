@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppShell from './AppShell';
 import SensorCardLecturas from './SensorCardLecturas';
-import { sensorService } from '../api/apiservice.jsx';
+import { sensorService, sectorService } from '../api/apiservice.jsx';
 
 export default function SensoresPage() {
     const [sectorFilter, setSectorFilter] = useState('todos');
@@ -9,6 +9,7 @@ export default function SensoresPage() {
 
     const [sensors, setSensors] = useState([]);
     const [lectures, setLectures] = useState([]);
+    const [sectores, setSectores] = useState([]);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -22,13 +23,15 @@ export default function SensoresPage() {
             setLoading(true);
             setError(null);
 
-            const [sensorData, readingData] = await Promise.all([
+            const [sensorData, readingData, sectorData] = await Promise.all([
                 sensorService.getAllSensors(),
-                sensorService.getAllReadings()
+                sensorService.getAllReadings(),
+                sectorService.getSectorInfo()
             ]);
 
             setSensors(sensorData);
             setLectures(readingData);
+            setSectores(sectorData);
 
         } catch (err) {
             console.error(err);
@@ -38,15 +41,11 @@ export default function SensoresPage() {
         }
     };
 
-    // Sectores únicos dinámicos
-    const sectores = useMemo(() => {
-        const unique = [...new Set(sensors.map(s => s.sector))];
-        return unique.sort((a, b) => a - b);
-    }, [sensors]);
+    const TIPOS_VISIBLES = ['HUMEDAD', 'PRESION', 'CAUDAL', 'NIVEL'];
 
-    const filteredSensors = sectorFilter === 'todos'
-        ? sensors
-        : sensors.filter(s => String(s.sector) === String(sectorFilter));
+    const filteredSensors = sensors
+        .filter(s => TIPOS_VISIBLES.includes(s.tipo?.toUpperCase()))
+        .filter(s => sectorFilter === 'todos' || String(s.sectorId) === String(sectorFilter));
 
     const getLecturesBySensor = (sensorId) =>
         lectures.filter(l => l.sensorId === sensorId);
@@ -65,20 +64,28 @@ export default function SensoresPage() {
                     </p>
                 </div>
 
-                {/* Filtro */}
-                <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+                {/* Filtro sector */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+                    <span style={{ fontSize: 10, color: '#94a3b8', fontFamily: "'DM Mono', monospace", letterSpacing: '0.08em' }}>
+                        SECTOR
+                    </span>
                     <select
                         value={sectorFilter}
-                        onChange={e => {
-                            setSectorFilter(e.target.value);
-                            setOpenId(null);
+                        onChange={e => { setSectorFilter(e.target.value); setOpenId(null); }}
+                        style={{
+                            padding: '6px 28px 6px 12px', borderRadius: 8,
+                            border: '1.5px solid #e2e8f0', fontSize: 11,
+                            fontFamily: "'DM Mono', monospace", color: '#334155',
+                            background: '#fff', outline: 'none', cursor: 'pointer',
+                            appearance: 'none',
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E")`,
+                            backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center',
                         }}
                     >
                         <option value="todos">Todos los sectores</option>
-
                         {sectores.map(s => (
-                            <option key={s} value={s}>
-                                Sector {s}
+                            <option key={s.id} value={s.id}>
+                                Sector {s.id}
                             </option>
                         ))}
                     </select>
@@ -91,7 +98,8 @@ export default function SensoresPage() {
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                        gap: 16
+                        gap: 16,
+                        alignItems: 'start'
                     }}>
                         {filteredSensors.map(sensor => (
                             <SensorCardLecturas
