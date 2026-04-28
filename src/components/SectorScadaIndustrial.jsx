@@ -11,7 +11,7 @@ const SCADA_IDS_BY_SECTOR = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
-const isOn = e => e === 'ARRANCADO' || e === 'on' || e === true;
+const isOn = e => e === 'ACTIVO' || e === 'on' || e === true;
 const fmt = (v, d = 1, s = '') => (v == null || isNaN(Number(v))) ? `N/A${s ? ' ' + s : ''}` : `${Number(v).toFixed(d)}${s ? ' ' + s : ''}`;
 
 async function safeGet(fn) { try { return await fn(); } catch { return null; } }
@@ -373,7 +373,7 @@ export default function SectorScadaIndustrial({ sector }) {
     if (!sid) return;
     try {
       setActionLoading(true);
-      const estado = val ? 'ARRANCADO' : 'PARADO';
+      const estado = val ? 'ACTIVO' : 'INACTIVO';
       await sensorService.updateActuadorState(sid, estado);
       setScada(p => popup.nodeKey === 'pump' ? { ...p, pumpOn: val } : popup.nodeKey === 'valveA' ? { ...p, valveAOn: val } : { ...p, valveBOn: val });
     } catch (e) { console.error(e); }
@@ -423,14 +423,25 @@ export default function SectorScadaIndustrial({ sector }) {
 
       {/* ── Barra superior ─────────────────────────────────────────────────── */}
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
         marginBottom: '1rem', animation: 'fadeInUp 0.4s ease both',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 3, height: 18, borderRadius: 2, background: 'linear-gradient(180deg,#3d8ef0,#60a5fa)' }} />
-          <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#e2e8f0' }}>
-            SCADA — {sector?.nombre || 'Sector'}
-          </h3>
+        <div style={{ marginBottom: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 3 }}>
+            <span style={{
+              fontSize: '0.66rem', fontWeight: 800, letterSpacing: '0.12em',
+              color: '#60a5fa', textTransform: 'uppercase',
+              background: '#60a5fa18', border: '1px solid #60a5fa30',
+              padding: '2px 8px', borderRadius: 6,
+              fontFamily: "'JetBrains Mono', monospace",
+            }}>SCADA</span>
+            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, color: '#f1f5f9', letterSpacing: '-0.02em' }}>
+              {sector?.nombre || 'Sector'}
+            </h3>
+          </div>
+          <p style={{ margin: 0, fontSize: '0.78rem', color: '#475569', marginLeft: 2 }}>
+            Visualización en tiempo real · Actualización cada 10 s
+          </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {loading && (

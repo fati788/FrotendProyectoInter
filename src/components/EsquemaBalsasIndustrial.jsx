@@ -184,7 +184,7 @@ export default function EsquemaBalsasIndustrial() {
         sensorService.getSensorById(ACTUADORES.ev2),
         sensorService.getSensorById(ACTUADORES.ev3),
       ]);
-      const on = e => e==='ARRANCADO'||e==='on'||e===true;
+      const on = e => e==='ACTIVO'||e==='on'||e===true;
       setState({
         pump:{ estado:on(bomba.estado), topicMQTT:bomba.topicMQTT||'actuadores/bomba' },
         ev1: { estado:on(ev1.estado),   topicMQTT:ev1.topicMQTT||'actuadores/ev1/cmd' },
@@ -220,7 +220,7 @@ export default function EsquemaBalsasIndustrial() {
 
   const handlePumpToggle = async (val) => {
     try {
-      await sensorService.updateActuadorState(ACTUADORES.bomba, val?'ARRANCADO':'PARADO');
+      await sensorService.updateActuadorState(ACTUADORES.bomba, val?'ACTIVO':'INACTIVO');
       setState(s => ({ ...s, pump:{ ...s.pump, estado:val } }));
       setPopup({ visible:false });
     } catch(e){ console.error(e); }
@@ -228,7 +228,7 @@ export default function EsquemaBalsasIndustrial() {
 
   const handleValveToggle = async (id, val) => {
     try {
-      await sensorService.updateActuadorState(ACTUADORES[id], val?'ARRANCADO':'PARADO');
+      await sensorService.updateActuadorState(ACTUADORES[id], val?'ACTIVO':'INACTIVO');
       setState(s => ({ ...s, [id]:{ ...s[id], estado:val } }));
       setPopup({ visible:false });
     } catch(e){ console.error(e); }

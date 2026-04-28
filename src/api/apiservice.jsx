@@ -14,11 +14,12 @@ export const api = axios.create({
 
 // Servicios para sensores
 export const sensorService = {
+
     // Obtener todos los sensores
     getAllSensors: async () => {
         try {
             console.log("Recargando sensores...");
-            const response = await api.get('/sensors');
+            const response = await api.get('/sensor');
             return response.data;
         } catch (error) {
             console.error('Error fetching sensors:', error);
@@ -29,12 +30,10 @@ export const sensorService = {
     // Obtener estadísticas de un sensor
     getSensorStats: async (sensorId, startDate, endDate) => {
         try {
-            //console.log(sensorId, startDate, endDate);
-            const response = await api.get(`/lecturas/${sensorId}`, {
-                params: {
-                    inicio: startDate,
-                    fin: endDate,
-                },
+            const response = await api.post('/lectura/bySensorIdAndFecha', {
+                sensorId,
+                fechaDesde: startDate,
+                fechaHasta: endDate,
             });
             return response.data;
         } catch (error) {
@@ -46,7 +45,7 @@ export const sensorService = {
     // Obtener un sensor por su ID
     getSensorById: async (sensorId) => {
         try {
-            const response = await api.get(`/sensors/${sensorId}`);
+            const response = await api.get(`/sensor/${sensorId}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching sensor ${sensorId}:`, error);
@@ -58,7 +57,7 @@ export const sensorService = {
     updateActuadorState: async (sensorId, estado) => {
         try {
             //console.log(sensorId, estado);
-            const response = await api.put(`/sensors/${sensorId}`, {
+            const response = await api.put(`sensor/sensores/${sensorId}`, {
                 estado: estado
             });
             return response.data;
@@ -70,19 +69,16 @@ export const sensorService = {
 
     // Obtener la última lectura de un sensor
     getLastSensorReading: async (sensorId) => {
-        try {
-            const response = await api.get(`/lecturas/${sensorId}/ultima`);
-            return response.data;
-        } catch (error) {
-            console.error(`Error fetching last reading for sensor ${sensorId}:`, error);
-            throw error;
-        }
+        const response = await api.get(`/lectura/bySensorId/${sensorId}`);
+        const lecturas = response.data;
+        // Devuelve la última por fecha, o null si no hay ninguna
+        return lecturas.sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora))[0] ?? null;
     },
 
     // Obtener TODAS las lecturas de todos los sensores
     getAllReadings: async () => {
         try {
-            const response = await api.get('/lecturas');
+            const response = await api.get('/lectura');
             return response.data;
         } catch (error) {
             console.error('Error fetching readings:', error);
@@ -93,11 +89,7 @@ export const sensorService = {
     //Obtener sensores por sector
     getSensorsBySector: async (sectorId) => {
         try {
-            const response = await api.get(`/sensors/sector`, {
-                params: {
-                    sector: sectorId
-                },
-            });
+            const response = await api.get(`/sensor/bySectorId/${sectorId}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching sensors for sector ${sectorId}:`, error);
@@ -108,11 +100,12 @@ export const sensorService = {
 
 // Servicios para sectores
 export const sectorService = {
+
     // Obtener los sectores con IDs 2, 3 y 4
     getSectorInfo: async () => {
         try {
             console.log("Obteniendo información de sectores...");
-            const response = await api.get('/sectors');
+            const response = await api.get('/sectores');
             // Filtrar solo los sectores 2, 3 y 4
             const sectores = response.data.filter(sector => [2, 3, 4].includes(sector.id));
             return sectores.sort((a, b) => a.id - b.id);

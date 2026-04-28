@@ -29,6 +29,7 @@ export default function SensoresPage() {
                 sectorService.getSectorInfo()
             ]);
 
+            console.log('Primer sensor:', sensorData[0]);
             setSensors(sensorData);
             setLectures(readingData);
             setSectores(sectorData);
@@ -45,7 +46,7 @@ export default function SensoresPage() {
 
     const filteredSensors = sensors
         .filter(s => TIPOS_VISIBLES.includes(s.tipo?.toUpperCase()))
-        .filter(s => sectorFilter === 'todos' || String(s.sectorId) === String(sectorFilter));
+        .filter(s => sectorFilter === 'todos' || String(s.sectorid) === String(sectorFilter));
 
     const getLecturesBySensor = (sensorId) =>
         lectures.filter(l => l.sensorId === sensorId);
