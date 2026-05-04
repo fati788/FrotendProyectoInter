@@ -367,6 +367,7 @@ export default function SectorScadaIndustrial({ sector }) {
   const readingByNode = { tank: scada.tankLevel, flow: scada.flow, pressure: scada.pressure, humidityA: scada.humidityA, humidityB: scada.humidityB };
   const actuatorState = { pump: scada.pumpOn, valveA: scada.valveAOn, valveB: scada.valveBOn };
 
+  /*
   const handleToggle = async (val) => {
     if (!popup.nodeKey) return;
     const sid = nodeSensorIds[popup.nodeKey];
@@ -379,6 +380,7 @@ export default function SectorScadaIndustrial({ sector }) {
     } catch (e) { console.error(e); }
     finally { setActionLoading(false); }
   };
+  */
 
   const levelColor = (pct) => pct < 25 ? T.warnAmber : T.okGreen;
   const valveBg = (on) => on ? T.valOnBg : T.valOffBg;
@@ -389,6 +391,69 @@ export default function SectorScadaIndustrial({ sector }) {
   const tankH = 180;
   const waterH = Math.max(0, (tankH - 2) * tankPct / 100);
   const waterY = 125 + 1 + (tankH - 2) * (1 - tankPct / 100);
+
+  const actuatorNodeKeys = ['pump', 'valveA', 'valveB'];
+
+
+  const applyAutomationActions = (actions = []) => {
+    const keyBySensorId = actuatorNodeKeys.reduce((acc, key) => {
+      const id = nodeSensorIds[key];
+      if (id) acc[id] = key;
+      return acc;
+    }, {});
+
+    setScada((prev) => {
+      const next = { ...prev };
+      actions.forEach((action) => {
+        const nodeKey = keyBySensorId[action.id];
+        if (!nodeKey) return;
+        const on = isOn(action.estado);
+        if (nodeKey === 'pump') next.pumpOn = on;
+        if (nodeKey === 'valveA') next.valveAOn = on;
+        if (nodeKey === 'valveB') next.valveBOn = on;
+      });
+      return next;
+    });
+
+    setSensorInfo((prev) => {
+      const next = { ...prev };
+      actions.forEach((action) => {
+        const nodeKey = keyBySensorId[action.id];
+        if (!nodeKey || !next[nodeKey]) return;
+        next[nodeKey] = { ...next[nodeKey], estado: action.estado };
+      });
+      return next;
+    });
+  };
+
+  const handleActuatorToggle = async (newValue) => {
+    if (!popup.nodeKey) return;
+
+    const sensorId = nodeSensorIds[popup.nodeKey];
+    if (!sensorId) return;
+
+    try {
+      setActionLoading(true);
+      const targetState = newValue ? 'ACTIVO' : 'INACTIVO';
+      const decision = await sensorService.decideEstadoActuador(sensorId, targetState);
+
+      if (!decision?.permiso) {
+        window.alert(decision?.motivo || 'Accion no permitida por reglas de automatizacion');
+        return;
+      }
+
+      applyAutomationActions(decision.accion || []);
+    } catch (error) {
+      const motivo = error?.response?.data?.motivo;
+      if (motivo) {
+        window.alert(motivo);
+      } else {
+        console.error('Error actualizando actuador:', error);
+      }
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
   return (
     <div style={{ width: '100%', fontFamily: "'Inter', sans-serif" }}>
@@ -711,7 +776,7 @@ export default function SectorScadaIndustrial({ sector }) {
           actuatorState={actuatorState[popup.nodeKey]}
           sensor={sensorInfo[popup.nodeKey]}
           onClose={closePopup}
-          onToggle={handleToggle}
+          onToggle={handleActuatorToggle}
           actionLoading={actionLoading}
         />
       )}

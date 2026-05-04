@@ -250,6 +250,10 @@ export default function EsquemaBalsasIndustrial() {
 
   
   const handlePumpToggle = async (newValue) => {
+    if (newValue && !state.ev1.estado && !state.ev2.estado && !state.ev3.estado) {
+      window.alert('No se puede arrancar la bomba sin ninguna electroválvula abierta.');
+      return;
+    }
     try {
       const targetState = newValue ? 'ACTIVO' : 'INACTIVO';
       const decision = await sensorService.decideEstadoActuador(ACTUADORES.bomba, targetState);
