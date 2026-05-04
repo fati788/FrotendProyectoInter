@@ -95,6 +95,20 @@ export const sensorService = {
             console.error(`Error fetching sensors for sector ${sectorId}:`, error);
             throw error;
         }
+    },
+
+    // Pide al backend la decisión de automatización
+    decideEstadoActuador: async (actuadorId, actuadorEstado) => {
+        try {
+            const response = await api.post('/automatizar/actuadores', {
+                id: actuadorId,
+                estado: actuadorEstado,
+            });
+            return response.data;
+        } catch (error) {
+            console.error(`Error decidiendo el estado del actuador ${actuadorId}:`, error);
+            throw error;
+        }
     }
 };
 

@@ -218,14 +218,84 @@ export default function EsquemaBalsasIndustrial() {
     } catch(e){ console.error('sensores:',e); }
   };
 
+  const applyAutomationActions = (actions = []) => {
+    const keyBySensorId = {
+      [ACTUADORES.bomba]: 'pump',
+      [ACTUADORES.ev1]: 'ev1',
+      [ACTUADORES.ev2]: 'ev2',
+      [ACTUADORES.ev3]: 'ev3'
+    };
+
+    setState((prev) => {
+      const next = { ...prev };
+      actions.forEach((action) => {
+        const key = keyBySensorId[action.id];
+        if (!key || !next[key]) return;
+        next[key] = { ...next[key], estado: action.estado === 'ACTIVO' };
+      });
+      return next;
+    });
+  };
+
+  /** 
   const handlePumpToggle = async (val) => {
     try {
+      const targetState = newValue ? 'ACTIVO' : 'INACTIVO';
       await sensorService.updateActuadorState(ACTUADORES.bomba, val?'ACTIVO':'INACTIVO');
       setState(s => ({ ...s, pump:{ ...s.pump, estado:val } }));
       setPopup({ visible:false });
     } catch(e){ console.error(e); }
   };
+  */
 
+  
+  const handlePumpToggle = async (newValue) => {
+    try {
+      const targetState = newValue ? 'ACTIVO' : 'INACTIVO';
+      const decision = await sensorService.decideEstadoActuador(ACTUADORES.bomba, targetState);
+
+      if (!decision?.permiso) {
+        window.alert(decision?.motivo || 'Accion no permitida por reglas de automatizacion');
+        return;
+      }
+
+      applyAutomationActions(decision.accion || []);
+      setPopup({ visible: false });
+    } catch (error) {
+      const motivo = error?.response?.data?.motivo;
+      if (motivo) {
+        window.alert(motivo);
+      } else {
+        console.error('Error updating pump:', error);
+      }
+    }
+  };
+
+  const handleValveToggle = async (valveId, newValue) => {
+    try {
+      const sensorId = ACTUADORES[valveId];
+      const targetState = newValue ? 'ACTIVO' : 'INACTIVO';
+      const decision = await sensorService.decideEstadoActuador(sensorId, targetState);
+
+      if (!decision?.permiso) {
+        window.alert(decision?.motivo || 'Accion no permitida por reglas de automatizacion');
+        return;
+      }
+
+      applyAutomationActions(decision.accion || []);
+      setPopup({ visible: false });
+    } catch (error) {
+      const motivo = error?.response?.data?.motivo;
+      if (motivo) {
+        window.alert(motivo);
+      } else {
+        console.error(`Error updating ${valveId}:`, error);
+      }
+    }
+  };
+  
+
+  /*
   const handleValveToggle = async (id, val) => {
     try {
       await sensorService.updateActuadorState(ACTUADORES[id], val?'ACTIVO':'INACTIVO');
@@ -233,6 +303,7 @@ export default function EsquemaBalsasIndustrial() {
       setPopup({ visible:false });
     } catch(e){ console.error(e); }
   };
+  */
 
   const bpPct = pctFrom(sensorData.mainTank.distanceCm, sensorData.mainTank.maxDistanceCm);
   const b1Pct = pctFrom(sensorData.tanks.b1.distanceCm, sensorData.tanks.b1.maxDistanceCm);
@@ -304,6 +375,8 @@ export default function EsquemaBalsasIndustrial() {
       </g>
     );
   };
+
+
 
   return (
     <div style={{ width:'100%', fontFamily:"'Inter',sans-serif" }}>
