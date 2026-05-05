@@ -101,8 +101,8 @@ export const sensorService = {
     decideEstadoActuador: async (actuadorId, actuadorEstado) => {
         try {
             const response = await api.post('/automatizar/actuadores', {
-                actuadorId,
-                actuadorEstado
+                id: actuadorId,
+                estado: actuadorEstado,
             });
             return response.data;
         } catch (error) {
