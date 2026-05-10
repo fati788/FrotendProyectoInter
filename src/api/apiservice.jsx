@@ -120,9 +120,7 @@ export const sectorService = {
         try {
             console.log("Obteniendo información de sectores...");
             const response = await api.get('/sectores');
-            // Filtrar solo los sectores 2, 3 y 4
-            const sectores = response.data.filter(sector => [2, 3, 4].includes(sector.id));
-            return sectores.sort((a, b) => a.id - b.id);
+            return response.data.sort((a, b) => a.id - b.id);
         } catch (error) {
             console.error('Error fetching sectors:', error);
             throw error;

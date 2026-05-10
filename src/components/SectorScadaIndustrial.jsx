@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { sensorService } from '../api/apiservice.jsx';
 
 // ─── IDs de sensores por sector ───────────────────────────────────────────────
-const LEVEL_SENSOR_BY_SECTOR = { 2: 6, 3: 7, 4: 8 };
+const LEVEL_SENSOR_BY_SECTOR = { 2: 8, 3: 9, 4: 10 };
 const SCADA_IDS_BY_SECTOR = {
   2: { pump: 14, flow: 17, pressure: 18, valveA: 15, humidityA: 19, valveB: 16, humidityB: 20 },
   3: { pump: 22, flow: 25, pressure: 26, valveA: 23, humidityA: 27, valveB: 24, humidityB: 28 },

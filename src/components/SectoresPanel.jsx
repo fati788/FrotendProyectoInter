@@ -116,7 +116,7 @@ function SectorCard({ sector, index, palette, onClick }) {
           fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em',
           color: accent, opacity: 0.7,
         }}>
-          S-{sector.id?.toString().padStart(2, '0') || (index + 2).toString().padStart(2, '0')}
+          S-{String(sector.id ?? (index + 1)).padStart(2, '0')}
         </div>
 
         {/* Encabezado */}
@@ -259,7 +259,7 @@ export default function SectoresPanel() {
       else setLoading(true);
       setError(null);
       const data = await sectorService.getSectorInfo();
-      setSectores(data);
+      setSectores(data.filter(s => [2, 3, 4].includes(Number(s.id))));
     } catch (err) {
       console.error('Error loading sectors:', err);
       setError('No se pudieron cargar los sectores');

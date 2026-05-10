@@ -153,7 +153,7 @@ export default function EsquemaBalsasIndustrial() {
   const { dark } = useTheme();
 
   const ACTUADORES     = { bomba:1, ev1:2, ev2:3, ev3:4 };
-  const SENSORES_NIVEL = { mainTank:2, b1:6, b2:7, b3:8 };
+  const SENSORES_NIVEL = { mainTank:7, b1:8, b2:9, b3:10 };
 
   const [state, setState] = useState({
     pump:{ estado:null, topicMQTT:'' },
