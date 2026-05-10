@@ -437,16 +437,17 @@ export default function SectorScadaIndustrial({ sector }) {
       const targetState = newValue ? 'ACTIVO' : 'INACTIVO';
       const decision = await sensorService.decideEstadoActuador(sensorId, targetState);
 
-      if (!decision?.allowed) {
-        window.alert(decision?.reason || 'Accion no permitida por reglas de automatizacion');
+      if (!decision?.permiso) {
+        window.alert(decision?.motivo || 'Accion no permitida por reglas de automatizacion');
         return;
       }
 
-      applyAutomationActions(decision.actions || []);
+      applyAutomationActions(decision.accion || []);
+      setPopup({ visible: false, nodeKey: null });
     } catch (error) {
-      const reason = error?.response?.data?.reason;
-      if (reason) {
-        window.alert(reason);
+      const motivo = error?.response?.data?.motivo;
+      if (motivo) {
+        window.alert(motivo);
       } else {
         console.error('Error actualizando actuador:', error);
       }
