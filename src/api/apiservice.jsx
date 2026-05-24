@@ -99,17 +99,25 @@ export const sensorService = {
 
     // Pide al backend la decisión de automatización
     decideEstadoActuador: async (actuadorId, actuadorEstado) => {
-        try {
-            const response = await api.post('/automatizar/actuadores', {
-                id: actuadorId,
-                estado: actuadorEstado,
-            });
-            return response.data;
-        } catch (error) {
-            console.error(`Error decidiendo el estado del actuador ${actuadorId}:`, error);
-            throw error;
-        }
+        const response = await api.post('/automatizar/actuadores', {
+            id: actuadorId,
+            estado: actuadorEstado,
+        });
+        return response.data;
     }
+};
+
+// Servicios para modo de riego automático
+export const modoRiegoService = {
+
+    obtenerModo: async () => {
+        const response = await api.get('/automatizar/modo');
+        return response.data; // boolean
+    },
+
+    cambiarModo: async (automatico) => {
+        await api.post('/automatizar/modo', null, { params: { automatico } });
+    },
 };
 
 // Servicios para sectores

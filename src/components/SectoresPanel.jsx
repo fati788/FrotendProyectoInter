@@ -259,7 +259,7 @@ export default function SectoresPanel() {
       else setLoading(true);
       setError(null);
       const data = await sectorService.getSectorInfo();
-      setSectores(data.filter(s => [2, 3, 4].includes(Number(s.id))));
+      setSectores(data.filter(s => [2, 3, 4, 5].includes(Number(s.id))));
     } catch (err) {
       console.error('Error loading sectors:', err);
       setError('No se pudieron cargar los sectores');
