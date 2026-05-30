@@ -5,8 +5,8 @@ import { sensorService } from '../api/apiservice.jsx';
 const LEVEL_SENSOR_BY_SECTOR = { 2: 6, 3: 7, 4: 8 };
 const SCADA_IDS_BY_SECTOR = {
   2: { pump: 9, flow: 12, pressure: 13, valveA: 10, humidityA: 14, valveB: 11, humidityB: 15 },
-  3: { pump: 22, flow: 25, pressure: 26, valveA: 23, humidityA: 27, valveB: 24, humidityB: 28 },
-  4: { pump: 30, flow: 33, pressure: 34, valveA: 31, humidityA: 35, valveB: 32, humidityB: 36 },
+  3: { pump: 16, flow: 19, pressure: 20, valveA: 17, humidityA: 21, valveB: 18, humidityB: 22 },
+  4: { pump: 23, flow: 26, pressure: 27, valveA: 24, humidityA: 28, valveB: 25, humidityB: 29 },
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
