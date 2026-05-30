@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sectorService } from '../api/apiservice.jsx';
+import { useTheme } from '../App.js';
 
 // ─── Icons ─────────────────────────────────────────────────────────────────────
 const AlertIcon = () => (
@@ -66,14 +67,19 @@ function PulseLoader({ color }) {
 // ─── Tarjeta de sector ─────────────────────────────────────────────────────────
 function SectorCard({ sector, index, palette, onClick }) {
   const [hovered, setHovered] = useState(false);
+  const { dark } = useTheme();
   const { accent, glow, badge, badgeBorder } = palette;
 
   const cardStyle = {
     position: 'relative',
-    background: hovered
-      ? 'linear-gradient(145deg, rgba(15,23,42,0.98) 0%, rgba(17,27,52,0.98) 100%)'
-      : 'linear-gradient(145deg, rgba(15,23,42,0.92) 0%, rgba(17,24,46,0.92) 100%)',
-    border: `1px solid ${hovered ? accent + '60' : 'rgba(255,255,255,0.07)'}`,
+    background: dark
+      ? (hovered
+          ? 'linear-gradient(145deg, rgba(15,23,42,0.98) 0%, rgba(17,27,52,0.98) 100%)'
+          : 'linear-gradient(145deg, rgba(15,23,42,0.92) 0%, rgba(17,24,46,0.92) 100%)')
+      : (hovered
+          ? 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)'
+          : 'linear-gradient(145deg, rgba(255,255,255,0.97) 0%, rgba(248,250,252,0.97) 100%)'),
+    border: `1px solid ${hovered ? accent + '60' : (dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)')}`,
     borderRadius: 16,
     padding: '1.5rem',
     cursor: 'pointer',
@@ -134,7 +140,7 @@ function SectorCard({ sector, index, palette, onClick }) {
             <div>
               <h3 style={{
                 margin: 0, fontSize: '1rem', fontWeight: 700,
-                color: '#f1f5f9', letterSpacing: '-0.01em',
+                color: dark ? '#f1f5f9' : '#0f172a', letterSpacing: '-0.01em',
                 fontFamily: "'Inter', sans-serif",
               }}>
                 {sector.nombre}
@@ -220,10 +226,11 @@ function DataRow({ icon, label, value, color, iconColor, mono }) {
 
 // ─── Skeleton de carga ─────────────────────────────────────────────────────────
 function SkeletonCard() {
+  const { dark } = useTheme();
   return (
     <div style={{
-      background: 'rgba(15,23,42,0.6)',
-      border: '1px solid rgba(255,255,255,0.05)',
+      background: dark ? 'rgba(15,23,42,0.6)' : 'rgba(0,0,0,0.04)',
+      border: dark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.06)',
       borderRadius: 16, padding: '1.5rem',
       animation: 'skeletonPulse 1.8s ease-in-out infinite',
     }}>
@@ -231,7 +238,7 @@ function SkeletonCard() {
         @keyframes skeletonPulse {
           0%,100% { opacity: 0.5; } 50% { opacity: 1; }
         }
-        .sk-line { background: rgba(255,255,255,0.07); border-radius: 6px; }
+        .sk-line { background: ${dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)'}; border-radius: 6px; }
       `}</style>
       <div className="sk-line" style={{width:'40%', height:12, marginBottom:10}} />
       <div className="sk-line" style={{width:'70%', height:18, marginBottom:20}} />
@@ -246,6 +253,7 @@ function SkeletonCard() {
 // ─── Componente principal ──────────────────────────────────────────────────────
 export default function SectoresPanel() {
   const navigate = useNavigate();
+  const { dark } = useTheme();
   const [sectores, setSectores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -304,7 +312,7 @@ export default function SectoresPanel() {
             }} />
             <h2 style={{
               margin: 0, fontSize: '1.25rem', fontWeight: 700,
-              color: '#f1f5f9', fontFamily: "'Inter', sans-serif",
+              color: dark ? '#f1f5f9' : '#0f172a', fontFamily: "'Inter', sans-serif",
               letterSpacing: '-0.02em',
             }}>
               Sectores de Cultivo
@@ -404,8 +412,8 @@ export default function SectoresPanel() {
           {sectores.length === 0 && (
             <div style={{
               textAlign: 'center', padding: '3rem 2rem',
-              background: 'rgba(15,23,42,0.5)',
-              border: '1px dashed rgba(255,255,255,0.1)',
+              background: dark ? 'rgba(15,23,42,0.5)' : 'rgba(0,0,0,0.03)',
+              border: dark ? '1px dashed rgba(255,255,255,0.1)' : '1px dashed rgba(0,0,0,0.1)',
               borderRadius: 16,
             }}>
               <div style={{ fontSize: '2rem', marginBottom: 12 }}>🌱</div>

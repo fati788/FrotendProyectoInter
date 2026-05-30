@@ -120,6 +120,43 @@ export const modoRiegoService = {
     },
 };
 
+// Servicios para la cámara de detección de plagas
+const CAMARA_DIRECT_URL = 'https://chinches.caserita-j.es';
+
+export const camaraService = {
+
+    // URLs directas (sin proxy) para el stream y snapshot
+    liveUrl:     `${CAMARA_DIRECT_URL}/stream.mjpg`,
+    snapshotUrl: `${CAMARA_DIRECT_URL}/live.jpg`,
+
+    // Proxy a través del backend Spring Boot
+    getLatest: async () => {
+        const response = await api.get('/camara/latest');
+        return response.data;
+    },
+
+    getHealth: async () => {
+        const response = await api.get('/camara/health');
+        return response.data;
+    },
+
+    getEvents: async (limit = 20, dateFrom = null, dateTo = null) => {
+        const params = { limit };
+        if (dateFrom) params.date_from = dateFrom;
+        if (dateTo)   params.date_to   = dateTo;
+        const response = await api.get('/camara/events', { params });
+        return response.data;
+    },
+
+    getStats: async (limit = 288, dateFrom = null, dateTo = null) => {
+        const params = { limit };
+        if (dateFrom) params.date_from = dateFrom;
+        if (dateTo)   params.date_to   = dateTo;
+        const response = await api.get('/camara/stats', { params });
+        return response.data;
+    },
+};
+
 // Servicios para sectores
 export const sectorService = {
 

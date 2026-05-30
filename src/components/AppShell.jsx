@@ -260,6 +260,9 @@ export default function AppShell({ children }) {
                         <NavLink to="/sensores" className={({ isActive }) => `nav-tab ${isActive ? 'nav-tab--active' : ''}`}>
                             Sensores
                         </NavLink>
+                        <NavLink to="/cam" className={({ isActive }) => `nav-tab ${isActive ? 'nav-tab--active' : ''}`}>
+                            Cámara
+                        </NavLink>
                     </nav>
 
                     {/* Derecha */}
