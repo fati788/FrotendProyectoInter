@@ -21,7 +21,7 @@ export default function ChartTooltip({ active, payload, label }) {
     >
       <div style={{ color: "#94a3b8", marginBottom: 2 }}>{label}</div>
       <div style={{ color: G[700], fontWeight: 700, fontSize: 14 }}>
-        {payload[0].value}{" "}
+        {payload[0].value != null ? Number(payload[0].value).toFixed(2) : '—'}{" "}
         <span style={{ fontSize: 11, fontWeight: 400 }}>
           {payload[0].payload?.unidad}
         </span>

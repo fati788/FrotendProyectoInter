@@ -37,10 +37,10 @@ export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onTo
     const trend = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
 
     const activeLectures = normalizeLectures(lectures);
-    const max = activeLectures.length ? Math.max(...activeLectures.map(l => l.valor)).toFixed(1) : '—';
-    const min = activeLectures.length ? Math.min(...activeLectures.map(l => l.valor)).toFixed(1) : '—';
+    const max = activeLectures.length ? Math.max(...activeLectures.map(l => l.valor)).toFixed(2) : '—';
+    const min = activeLectures.length ? Math.min(...activeLectures.map(l => l.valor)).toFixed(2) : '—';
     const avg = activeLectures.length
-        ? (activeLectures.reduce((s, l) => s + l.valor, 0) / activeLectures.length).toFixed(1)
+        ? (activeLectures.reduce((s, l) => s + l.valor, 0) / activeLectures.length).toFixed(2)
         : '—';
 
     // ── Colores según tema ───────────────────────────────────────────────────────
@@ -113,7 +113,7 @@ export default function SensorCardLecturas({ sensor, lectures = [], isOpen, onTo
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                     <div>
                         <span style={{ fontSize: 28, fontWeight: 800, color: valueColor, lineHeight: 1 }}>
-                            {lastLecture?.valor ?? '—'}
+                            {lastLecture?.valor != null ? Number(lastLecture.valor).toFixed(2) : '—'}
                         </span>
                         <span style={{ fontSize: 12, color: '#64748b', marginLeft: 4, fontFamily: "'JetBrains Mono', monospace" }}>
                             {unit}

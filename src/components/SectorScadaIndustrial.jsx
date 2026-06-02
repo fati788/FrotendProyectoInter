@@ -12,17 +12,17 @@ const SCADA_IDS_BY_SECTOR = {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
 const isOn = e => e === 'ACTIVO' || e === 'on' || e === true;
-const fmt = (v, d = 1, s = '') => (v == null || isNaN(Number(v))) ? `N/A${s ? ' ' + s : ''}` : `${Number(v).toFixed(d)}${s ? ' ' + s : ''}`;
+const fmt = (v, d = 2, s = '') => (v == null || isNaN(Number(v))) ? `N/A${s ? ' ' + s : ''}` : `${Number(v).toFixed(d)}${s ? ' ' + s : ''}`;
 
 async function safeGet(fn) { try { return await fn(); } catch { return null; } }
 
 // ─── Config de popups ─────────────────────────────────────────────────────────
 const SENSOR_CFG = {
-  tank: { title: 'Sensor Nivel Balsa', unit: 'cm', digits: 1, icon: '📡', color: '#a78bfa' },
-  flow: { title: 'Sensor Caudal', unit: 'L/min', digits: 1, icon: '🌊', color: '#34d399' },
+  tank: { title: 'Sensor Nivel Balsa', unit: 'cm', digits: 2, icon: '📡', color: '#a78bfa' },
+  flow: { title: 'Sensor Caudal', unit: 'L/min', digits: 2, icon: '🌊', color: '#34d399' },
   pressure: { title: 'Sensor Presión', unit: 'bar', digits: 2, icon: '🔵', color: '#60a5fa' },
-  humidityA: { title: 'Humedad Ramal 1', unit: '%', digits: 1, icon: '💧', color: '#60a5fa' },
-  humidityB: { title: 'Humedad Ramal 2', unit: '%', digits: 1, icon: '💧', color: '#60a5fa' },
+  humidityA: { title: 'Humedad Ramal 1', unit: '%', digits: 2, icon: '💧', color: '#60a5fa' },
+  humidityB: { title: 'Humedad Ramal 2', unit: '%', digits: 2, icon: '💧', color: '#60a5fa' },
 };
 const ACTUATOR_CFG = {
   pump: { title: 'Bomba Centrífuga', onLabel: 'EN MARCHA', offLabel: 'PARADA', actionOn: 'Arrancar', actionOff: 'Parar', icon: '⚙️', color: '#38bdf8' },

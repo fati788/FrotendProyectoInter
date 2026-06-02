@@ -83,7 +83,7 @@ export default function TableView({ data, unit }) {
                 {data.length - i}
               </td>
               <td style={{ padding: "5px 8px", color: G[700], fontWeight: 700 }}>
-                {row.valor}
+                {row.valor != null ? Number(row.valor).toFixed(2) : '—'}
               </td>
               <td style={{ padding: "5px 8px", color: unitColor }}>
                 {unit}
