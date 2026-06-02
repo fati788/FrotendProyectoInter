@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../App.js';
 import imagenes from "../assets/imagenes";
-import { modoRiegoService } from '../api/apiservice.jsx';
 
 // ─── Iconos ───────────────────────────────────────────────────────────────────
 const SunIcon = () => (
@@ -194,18 +193,6 @@ function WeatherBar({ weather, wLoading, wError }) {
 export default function AppShell({ children }) {
     const { dark, toggle } = useTheme();
     const { weather, wLoading, wError } = useWeather();
-    const [modoAuto, setModoAuto] = useState(null);
-
-    useEffect(() => {
-        modoRiegoService.obtenerModo().then(setModoAuto).catch(() => setModoAuto(null));
-    }, []);
-
-    const toggleModoRiego = async () => {
-        const nuevo = !modoAuto;
-        await modoRiegoService.cambiarModo(nuevo);
-        setModoAuto(nuevo);
-    };
-
     const wrapperStyle = {
         minHeight: '100vh',
         fontFamily: "'Inter', -apple-system, sans-serif",
@@ -267,32 +254,6 @@ export default function AppShell({ children }) {
 
                     {/* Derecha */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <button
-                            onClick={toggleModoRiego}
-                            disabled={modoAuto === null}
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: 6,
-                                padding: '0.3rem 1rem',
-                                background: modoAuto ? 'rgba(52,211,153,0.08)' : 'rgba(251,146,60,0.08)',
-                                border: modoAuto ? '1px solid rgba(52,211,153,0.3)' : '1px solid rgba(251,146,60,0.3)',
-                                borderRadius: 20,
-                                cursor: modoAuto === null ? 'default' : 'pointer',
-                                transition: 'all 0.3s',
-                            }}
-                        >
-                            <span style={{
-                                width: 8, height: 8, borderRadius: '50%',
-                                background: modoAuto ? '#34d399' : '#fb923c',
-                                animation: modoAuto ? 'statusPulse 2s infinite' : 'none',
-                            }} />
-                            <span style={{
-                                fontSize: '0.75rem',
-                                color: modoAuto ? '#34d399' : '#fb923c',
-                                fontWeight: 700, letterSpacing: '0.04em',
-                            }}>
-                                {modoAuto === null ? 'CARGANDO...' : modoAuto ? 'RIEGO AUTO: ON' : 'RIEGO AUTO: OFF'}
-                            </span>
-                        </button>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.72rem', color: '#64748b', fontWeight: 500 }}>
                             <MapPinIcon />
                             <span>Cuevas del Almanzora, Almería</span>

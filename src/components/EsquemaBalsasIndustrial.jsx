@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { sensorService } from '../api/apiservice.jsx';
+import { sensorService, modoNivelService } from '../api/apiservice.jsx';
 import { useTheme } from '../App.js';
 
 const clamp   = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
@@ -151,6 +151,22 @@ function Modal({ popup, state, sensorData, onClose, onPumpToggle, onValveToggle 
 // ─── Main Component ─────────────────────────────────────────────────────────────
 export default function EsquemaBalsasIndustrial() {
   const { dark } = useTheme();
+
+  const [modoNivel, setModoNivel] = useState(null);
+
+  useEffect(() => {
+    modoNivelService.obtenerModo().then(setModoNivel).catch(() => setModoNivel(null));
+  }, []);
+
+  const toggleModoNivel = async () => {
+    const nuevo = !modoNivel;
+    try {
+      await modoNivelService.cambiarModo(nuevo);
+      setModoNivel(nuevo);
+    } catch (e) {
+      console.error('Error cambiando modo nivel:', e);
+    }
+  };
 
   const ACTUADORES     = { bomba:1, ev1:2, ev2:3, ev3:4 };
   const SENSORES_NIVEL = { mainTank:7, b1:6, b2:7, b3:8 };
@@ -405,6 +421,35 @@ export default function EsquemaBalsasIndustrial() {
           </h3>
         </div>
         <div style={{ display:'flex',alignItems:'center',gap:8 }}>
+          {/* Botón modo llenado automático por nivel */}
+          <button
+            onClick={toggleModoNivel}
+            disabled={modoNivel === null}
+            style={{
+              display:'flex', alignItems:'center', gap:6,
+              padding:'0.28rem 0.85rem',
+              background: modoNivel ? 'rgba(52,211,153,0.08)' : 'rgba(251,146,60,0.08)',
+              border: modoNivel ? '1px solid rgba(52,211,153,0.3)' : '1px solid rgba(251,146,60,0.3)',
+              borderRadius:20,
+              cursor: modoNivel === null ? 'default' : 'pointer',
+              transition:'all 0.3s',
+            }}
+          >
+            <span style={{
+              width:7, height:7, borderRadius:'50%',
+              background: modoNivel ? '#34d399' : '#fb923c',
+              flexShrink:0,
+            }} />
+            <span style={{
+              fontSize:'0.7rem',
+              color: modoNivel ? '#34d399' : '#fb923c',
+              fontWeight:700, letterSpacing:'0.04em',
+              fontFamily:"'JetBrains Mono',monospace",
+              whiteSpace:'nowrap',
+            }}>
+              {modoNivel === null ? 'CARGANDO...' : modoNivel ? 'LLENADO AUTO: ON' : 'LLENADO AUTO: OFF'}
+            </span>
+          </button>
           {loading && (
             <div style={{ display:'flex',alignItems:'center',gap:6 }}>
               <span style={{ display:'inline-block',width:10,height:10,border:'1.5px solid rgba(37,99,235,0.3)',borderTop:'1.5px solid #2563eb',borderRadius:'50%',animation:'pumpRot 0.8s linear infinite' }}/>

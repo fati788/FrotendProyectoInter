@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { sensorService } from '../api/apiservice.jsx';
+import { sensorService, modoHumedadService } from '../api/apiservice.jsx';
 
 // ─── IDs de sensores por sector ───────────────────────────────────────────────
 const LEVEL_SENSOR_BY_SECTOR = { 2: 6, 3: 7, 4: 8 };
@@ -312,6 +312,7 @@ export default function SectorScadaIndustrial({ sector }) {
   const [popup, setPopup] = useState({ visible: false, nodeKey: null });
   const [actionLoading, setActionLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
+  const [modoHumedad, setModoHumedad] = useState(null);
 
   const ids = useMemo(() => ({
     level: LEVEL_SENSOR_BY_SECTOR[sectorId],
@@ -322,6 +323,20 @@ export default function SectorScadaIndustrial({ sector }) {
     tank: ids.level, pump: ids.pump, flow: ids.flow, pressure: ids.pressure,
     valveA: ids.valveA, humidityA: ids.humidityA, valveB: ids.valveB, humidityB: ids.humidityB,
   }), [ids]);
+
+  useEffect(() => {
+    modoHumedadService.obtenerModo().then(setModoHumedad).catch(() => setModoHumedad(null));
+  }, []);
+
+  const toggleModoHumedad = async () => {
+    const nuevo = !modoHumedad;
+    try {
+      await modoHumedadService.cambiarModo(nuevo);
+      setModoHumedad(nuevo);
+    } catch (e) {
+      console.error('Error cambiando modo humedad:', e);
+    }
+  };
 
   useEffect(() => {
     let alive = true;
@@ -510,6 +525,36 @@ export default function SectorScadaIndustrial({ sector }) {
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* Botón modo riego automático por humedad */}
+          <button
+            onClick={toggleModoHumedad}
+            disabled={modoHumedad === null}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '0.28rem 0.85rem',
+              background: modoHumedad ? 'rgba(52,211,153,0.08)' : 'rgba(251,146,60,0.08)',
+              border: modoHumedad ? '1px solid rgba(52,211,153,0.3)' : '1px solid rgba(251,146,60,0.3)',
+              borderRadius: 20,
+              cursor: modoHumedad === null ? 'default' : 'pointer',
+              transition: 'all 0.3s',
+            }}
+          >
+            <span style={{
+              width: 7, height: 7, borderRadius: '50%',
+              background: modoHumedad ? '#34d399' : '#fb923c',
+              animation: modoHumedad ? 'glowPulse 2s infinite' : 'none',
+              flexShrink: 0,
+            }} />
+            <span style={{
+              fontSize: '0.7rem',
+              color: modoHumedad ? '#34d399' : '#fb923c',
+              fontWeight: 700, letterSpacing: '0.04em',
+              fontFamily: "'JetBrains Mono', monospace",
+              whiteSpace: 'nowrap',
+            }}>
+              {modoHumedad === null ? 'CARGANDO...' : modoHumedad ? 'RIEGO AUTO: ON' : 'RIEGO AUTO: OFF'}
+            </span>
+          </button>
           {loading && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{

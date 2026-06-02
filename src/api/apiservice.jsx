@@ -107,16 +107,25 @@ export const sensorService = {
     }
 };
 
-// Servicios para modo de riego automático
-export const modoRiegoService = {
-
+// Modo automático — llenado de balsas por nivel
+export const modoNivelService = {
     obtenerModo: async () => {
-        const response = await api.get('/automatizar/modo');
+        const response = await api.get('/automatizar/modo/nivel');
         return response.data; // boolean
     },
-
     cambiarModo: async (automatico) => {
-        await api.post('/automatizar/modo', null, { params: { automatico } });
+        await api.post('/automatizar/modo/nivel', null, { params: { automatico } });
+    },
+};
+
+// Modo automático — riego por humedad del suelo
+export const modoHumedadService = {
+    obtenerModo: async () => {
+        const response = await api.get('/automatizar/modo/humedad');
+        return response.data; // boolean
+    },
+    cambiarModo: async (automatico) => {
+        await api.post('/automatizar/modo/humedad', null, { params: { automatico } });
     },
 };
 
