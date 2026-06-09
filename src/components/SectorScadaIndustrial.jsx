@@ -18,7 +18,7 @@ async function safeGet(fn) { try { return await fn(); } catch { return null; } }
 
 // ─── Config de popups ─────────────────────────────────────────────────────────
 const SENSOR_CFG = {
-  tank: { title: 'Sensor Nivel Balsa', unit: 'cm', digits: 2, icon: '📡', color: '#a78bfa' },
+  tank: { title: 'Sensor Nivel Balsa', unit: '%', digits: 2, icon: '📡', color: '#a78bfa' },
   flow: { title: 'Sensor Caudal', unit: 'L/min', digits: 2, icon: '🌊', color: '#34d399' },
   pressure: { title: 'Sensor Presión', unit: 'bar', digits: 2, icon: '🔵', color: '#60a5fa' },
   humidityA: { title: 'Humedad Ramal 1', unit: '%', digits: 2, icon: '💧', color: '#60a5fa' },
@@ -379,7 +379,7 @@ export default function SectorScadaIndustrial({ sector }) {
   const openPopup = (k) => setPopup({ visible: true, nodeKey: k });
   const closePopup = () => setPopup({ visible: false, nodeKey: null });
 
-  const readingByNode = { tank: scada.tankLevel, flow: scada.flow, pressure: scada.pressure, humidityA: scada.humidityA, humidityB: scada.humidityB };
+  const readingByNode = { tank: tankPct, flow: scada.flow, pressure: scada.pressure, humidityA: scada.humidityA, humidityB: scada.humidityB };
   const actuatorState = { pump: scada.pumpOn, valveA: scada.valveAOn, valveB: scada.valveBOn };
 
   /*
@@ -651,7 +651,7 @@ export default function SectorScadaIndustrial({ sector }) {
             {/* Valor */}
             <rect x="70" y="40" width="80" height="20" rx="5" fill={tankPct < 25 ? T.valOffBg : T.valOnBg} stroke={tankPct < 25 ? T.valOffStroke : T.valOnStroke} strokeWidth="0.8" />
             <text style={{ fontFamily: 'JetBrains Mono,monospace', fontSize: '9px', fontWeight: 700 }} x="110" y="54" textAnchor="middle" fill={lc}>
-              {fmt(scada.tankLevel, 1, 'cm')}
+              {fmt(tankPct, 2, '%')}
             </text>
             <text style={{ fontFamily: 'Inter,sans-serif', fontSize: '7.5px' }} x="110" y="30" textAnchor="middle" fill={T.labelSmall}>Sensor US Nivel</text>
           </g>

@@ -117,8 +117,8 @@ function Modal({ popup, state, sensorData, onClose, onPumpToggle, onValveToggle 
               <div style={{ fontSize:'0.65rem',color:'#475569',textTransform:'uppercase',letterSpacing:'0.1em',fontWeight:700,marginBottom:6 }}>Nivel actual</div>
               <div style={{ display:'flex',alignItems:'baseline',justifyContent:'space-between' }}>
                 <div>
-                  <span style={{ fontSize:'2.2rem',fontWeight:700,color:warn?'#f59e0b':'#a78bfa',fontFamily:"'JetBrains Mono',monospace" }}>{cm}</span>
-                  <span style={{ fontSize:'0.9rem',color:'#64748b',marginLeft:6 }}>cm</span>
+                  <span style={{ fontSize:'2.2rem',fontWeight:700,color:warn?'#f59e0b':'#a78bfa',fontFamily:"'JetBrains Mono',monospace" }}>{pct.toFixed(2)}</span>
+                  <span style={{ fontSize:'0.9rem',color:'#64748b',marginLeft:6 }}>%</span>
                 </div>
                 <span style={{ fontSize:'0.72rem',fontWeight:700,padding:'3px 10px',borderRadius:6,color:warn?'#f59e0b':'#34d399',background:warn?'rgba(245,158,11,0.1)':'rgba(52,211,153,0.1)',border:`1px solid ${warn?'rgba(245,158,11,0.3)':'rgba(52,211,153,0.3)'}` }}>
                   {warn?'⚠ ALERTA':'✓ NORMAL'}
@@ -391,7 +391,7 @@ export default function EsquemaBalsasIndustrial() {
         <path d={`M${x+w/2-4},${y-11} Q${x+w/2},${y-7} ${x+w/2+4},${y-11}`} fill="none" stroke={C.pipe} strokeWidth="1.1" strokeLinecap="round"/>
         <line x1={x+w/2} y1={y-26} x2={x+w/2} y2={y-42} stroke={C.sigLine} strokeWidth="1" strokeDasharray="3 2"/>
         <rect x={x+w/2-26} y={y-58} width="52" height="17" rx="5" fill={warn?C.valOffBg:C.valOnBg} stroke={warn?C.valOffSt:C.valOnSt} strokeWidth="0.8"/>
-        <text style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'8.5px',fontWeight:700}} x={x+w/2} y={y-46} textAnchor="middle" fill={lc}>{cmVal} cm</text>
+        <text style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'8.5px',fontWeight:700}} x={x+w/2} y={y-46} textAnchor="middle" fill={lc}>{pct.toFixed(2)} %</text>
       </g>
     );
   };
@@ -511,7 +511,7 @@ export default function EsquemaBalsasIndustrial() {
             <path d="M103,101 Q110,107 117,101" fill="none" stroke={C.pipe} strokeWidth="0.7" strokeLinecap="round" opacity="0.4"/>
             <line x1="110" y1="80" x2="110" y2="52" stroke={C.sigLine} strokeWidth="1" strokeDasharray="3 2"/>
             <rect x="76" y="36" width="68" height="18" rx="5" fill={bpPct<25?C.valOffBg:C.valOnBg} stroke={bpPct<25?C.valOffSt:C.valOnSt} strokeWidth="0.8"/>
-            <text style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'8.5px',fontWeight:700}} x="110" y="49" textAnchor="middle" fill={lvlColor(bpPct)}>{sensorData.mainTank.distanceCm} cm</text>
+            <text style={{fontFamily:"'JetBrains Mono',monospace",fontSize:'8.5px',fontWeight:700}} x="110" y="49" textAnchor="middle" fill={lvlColor(bpPct)}>{bpPct.toFixed(2)} %</text>
             <text style={{fontFamily:"'Inter',sans-serif",fontSize:'7.5px'}} x="110" y="25" textAnchor="middle" fill={C.lblDim}>Sensor US Nivel</text>
           </g>
 
